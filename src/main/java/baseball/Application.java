@@ -2,7 +2,9 @@ package baseball;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import camp.nextstep.edu.missionutils.Console;
@@ -32,11 +34,15 @@ public class Application {
     }
     
     public static List<Integer> getComputerNum() {
+    	computerNum = new ArrayList<>();
     	while (computerNum.size() < 3) {
     		int randomNumber = Randoms.pickNumberInRange(1, 9);
     		if (!computerNum.contains(randomNumber)) {
     			computerNum.add(randomNumber);
     		}
+    	}
+    	for (int c : computerNum) {
+    		System.out.println(c);
     	}
     	return computerNum;
     }
@@ -44,10 +50,15 @@ public class Application {
     public static List<Integer> getUserNum() {
     	System.out.print("숫자를 입력해주세요 : ");
     	String userStr = Console.readLine();
+    	isNotEmpty(userStr);
     	
     	return Arrays.stream(userStr.split(""))
     			.mapToInt(Integer::parseInt)
     			.boxed().collect(Collectors.toList());
+    }
+    
+    public static void isNotEmpty(String userStr) {
+    	if (userStr.equals("")) throw new IllegalArgumentException();
     }
     
     public static void verifyUserNum() {
@@ -60,11 +71,8 @@ public class Application {
     }
     
     public static void isInDuplicatedNum() {
-    	int targetNum = userNum.get(0);
-    	for (int i=1; i<userNum.size(); i++) {
-    		if (targetNum == userNum.get(i)) throw new IllegalArgumentException();
-    		targetNum = userNum.get(i);
-    	}
+    	Set<Integer> userNumSet = new HashSet<>(userNum);
+    	if (userNum.size() != userNumSet.size()) throw new IllegalArgumentException();
     }
     
     public static void getBaseballGameResult() {
